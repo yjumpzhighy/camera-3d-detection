@@ -32,13 +32,27 @@ def get_affine_transform(center, scale, rot, output_size,
   src[2:, :] = get_3rd_point(src[0, :], src[1, :])
   dst[2:, :] = get_3rd_point(dst[0, :], dst[1, :])
 
-  trans = cv2.getAffineTransform(np.float32(src), np.float32(dst))
+  if inv:
+    trans = cv2.getAffineTransform(np.float32(dst), np.float32(src))
+  else:
+    trans = cv2.getAffineTransform(np.float32(src), np.float32(dst))
   return trans
 
 def affine_transform(pt, t):
     new_pt = np.array([pt[0], pt[1], 1.], dtype=np.float32).T
     new_pt = np.dot(t, new_pt)
     return new_pt[:2]
+
+
+
+def transform_preds_with_trans(coords, trans):
+  """
+  coords = [k,2]
+  """
+  target_coords = np.ones((coords.shape[0],3), np.float32)
+  target_coords[:, :2] = coords
+  target_coords = np.dot(trans, target_coords.transpose()).transpose()
+  return target_coords[:, :2]
 
 def get_3rd_point(a, b):
     direct = a - b

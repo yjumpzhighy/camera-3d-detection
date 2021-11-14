@@ -416,7 +416,6 @@ class GenericDataset(data.Dataset):
         if 'alpha' in ann:
           rot_y = ann['rotation_y']
           loc = ann['location']
-          #rot between object ori and camera-obj ori
           alpha_new = rot_y - np.arctan2(loc[0], loc[2])
           if alpha_new > np.pi:
             alpha_new -= 2*np.pi

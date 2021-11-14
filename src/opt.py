@@ -16,8 +16,6 @@ class Opts(object):
     self.test_dataset = 'kitti'  #'coco' 
     self.debug_mode = 0
     self.pretrained = False
-    self.load_model_path = '' 
-    self.save_model_path = ''
     self.lateral_dist = False 
     self.rel_dep_reg = False
     self.split = 'train' #'val'
@@ -33,6 +31,7 @@ class Opts(object):
     self.save_point = [1,20,40,60]
     self.root_dir = os.path.join(os.path.dirname(__file__), '..')
     self.save_dir = os.path.join(self.root_dir, 'checkpoints')
+    self.load_model_dir = os.path.join(self.save_dir, 'model_last.pth')
     
     #network
     self.arch = 'generic' #res_101, dla_34, mobilenet
@@ -57,6 +56,8 @@ class Opts(object):
     self.dense_encode = False #???
     self.fpn = False
     self.out_strides = '4' #strides of output feature maps of fpn
+    self.K = 100  #max number of output objects
+    self.out_thresh = 0.1  #output minimal confidence threshold 
 
     #data
     self.input_h = -1
@@ -77,6 +78,7 @@ class Opts(object):
     self.save_step = 90  #when to save the model to disk
     self.epochs = 60
     self.batch_size = 16
+    self.resume = False
     
     #loss
     self.obj_depth_loss_type = 'L1' #'ord_reg'
@@ -92,6 +94,9 @@ class Opts(object):
     self.use_modified_grad = False  #Modified gradient normalize
     self.use_dynamic_wt_avg = False  #Dynamic weights average loss
     self.crit_loss_type = 'Focal' #GHM-C:gradient harmonizing mechanism
+    self.lateral_dst_reg_type = 'sqrt'  #sqrt, sigmoid
+    self.amodel_offset_reg_type = 'ori' #ori,sqrt,sigmoid
+    self.dep_uncertainty_type = 'gaussian'
 
 
   def update_with_dataset(self, opt, dataset):
